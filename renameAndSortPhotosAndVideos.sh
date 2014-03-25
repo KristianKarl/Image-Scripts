@@ -7,12 +7,17 @@
 #
 
 
+# Check if dependecy command exists
+command -v exiv2 >/dev/null 2>&1 || { echo >&2 "I require exiv2 but it's not installed.  Aborting."; exit 1; }
+command -v ffprobe >/dev/null 2>&1 || { echo >&2 "I require ffprobe but it's not installed.  Aborting."; exit 1; }
+
+
 SAVEIFS=$IFS
 IFS=$(echo -en "\n\b")
 
-num=`find . -type f -iregex '^.*\.JPG\|^.*\.JPEG\|^.*\.NEF\|^.*\.CR2' | wc -l`
+num=`find . -type f -iregex '^.*\.JPG\|^.*\.JPEG\|^.*\.PNG\|^.*\.NEF\|^.*\.CR2' | wc -l`
 if [ $num != "0" ]; then
-  find . -type f -iregex '^.*\.JPG\|^.*\.JPEG\|^.*\.NEF\|^.*\.CR2' -print0 | xargs -0 exiv2 -F -r'%Y-%m-%d_%H%M%S' rename
+  find . -type f -iregex '^.*\.JPG\|^.*\.JPEG\|^.*\.PNG\|^.*\.NEF\|^.*\.CR2' -print0 | xargs -0 exiv2 -F -r'%Y-%m-%d_%H%M%S' rename
 fi
 
 
@@ -40,7 +45,7 @@ do
 done
 
 
-for file in $( find . -type f -iregex '^.*\.JPG\|^.*\.JPEG\|^.*\.NEF\|^.*\.CR2\|^.*\.AVI\|^.*\.MP4|^.*\.MOV' | sort )
+for file in $( find . -type f -iregex '^.*\.JPG\|^.*\.JPEG\|^.*\.NEF\|^.*\.CR2\|^.*\.AVI\|^.*\.MP4\|^.*\.MOV' | sort )
 do
   # strip directory and suffix from filenames
   fname=`basename $file`
