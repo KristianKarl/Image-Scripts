@@ -9,7 +9,7 @@
 
 # Check if dependecy command exists
 command -v exiv2 >/dev/null 2>&1 || { echo >&2 "I require exiv2 but it's not installed.  Aborting."; exit 1; }
-command -v ffprobe >/dev/null 2>&1 || { echo >&2 "I require ffprobe but it's not installed.  Aborting."; exit 1; }
+command -v mediainfo >/dev/null 2>&1 || { echo >&2 "I require mediainfo but it's not installed.  Aborting."; exit 1; }
 
 
 SAVEIFS=$IFS
@@ -23,24 +23,24 @@ fi
 
 for file in $( find . -type f -iregex '^.*\.AVI' )
 do
-  time_stamp=`ffprobe "$file" 2>&1 | perl -nle 'print for m/creation_time\s+:\s+(.*)/g'|head -1`
-  ts=`echo $time_stamp | sed 's/://g' | sed 's/ /_/g'`
+  time_stamp=$(mediainfo "$file" | grep "Encoded date" | head -n1 | cut -d: -f2-)
+  ts=$(TZ=CET date -d "$time_stamp" -u +"%Y-%m-%d_%H%M%S")
   mv "$file" "$ts.AVI"
 done
 
 
 for file in $( find . -type f -iregex '^.*\.MP4' )
 do
-  time_stamp=`ffprobe "$file" 2>&1 | perl -nle 'print for m/creation_time\s+:\s+(.*)/g'|head -1`
-  ts=`echo $time_stamp | sed 's/://g' | sed 's/ /_/g'`
+  time_stamp=$(mediainfo "$file" | grep "Encoded date" | head -n1 | cut -d: -f2-)
+  ts=$(TZ=CET date -d "$time_stamp" -u +"%Y-%m-%d_%H%M%S")
   mv "$file" "$ts.mp4"
 done
 
 
 for file in $( find . -type f -iregex '^.*\.MOV' )
 do
-  time_stamp=`ffprobe "$file" 2>&1 | perl -nle 'print for m/creation_time\s+:\s+(.*)/g'|head -1`
-  ts=`echo $time_stamp | sed 's/://g' | sed 's/ /_/g'`
+  time_stamp=$(mediainfo "$file" | grep "Encoded date" | head -n1 | cut -d: -f2-)
+  ts=$(TZ=CET date -d "$time_stamp" -u +"%Y-%m-%d_%H%M%S")
   mv "$file" "$ts.mov"
 done
 
