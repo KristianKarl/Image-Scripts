@@ -24,7 +24,7 @@ fi
 for file in $( find . -type f -iregex '^.*\.AVI' )
 do
   time_stamp=$(mediainfo "$file" | grep "Encoded date" | head -n1 | cut -d: -f2-)
-  ts=$(TZ=CET date -d "$time_stamp" -u +"%Y-%m-%d_%H%M%S")
+  ts=$(TZ=CET date -d "$time_stamp" +"%Y-%m-%d_%H%M%S")
   mv "$file" "$ts.AVI"
 done
 
@@ -32,7 +32,7 @@ done
 for file in $( find . -type f -iregex '^.*\.MP4' )
 do
   time_stamp=$(mediainfo "$file" | grep "Encoded date" | head -n1 | cut -d: -f2-)
-  ts=$(TZ=CET date -d "$time_stamp" -u +"%Y-%m-%d_%H%M%S")
+  ts=$(TZ=CET date -d "$time_stamp" +"%Y-%m-%d_%H%M%S")
   mv "$file" "$ts.mp4"
 done
 
@@ -40,7 +40,7 @@ done
 for file in $( find . -type f -iregex '^.*\.MOV' )
 do
   time_stamp=$(mediainfo "$file" | grep "Encoded date" | head -n1 | cut -d: -f2-)
-  ts=$(TZ=CET date -d "$time_stamp" -u +"%Y-%m-%d_%H%M%S")
+  ts=$(TZ=CET date -d "$time_stamp" +"%Y-%m-%d_%H%M%S")
   mv "$file" "$ts.mov"
 done
 
