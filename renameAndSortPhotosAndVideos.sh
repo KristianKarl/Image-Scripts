@@ -45,7 +45,15 @@ do
 done
 
 
-for file in $( find . -type f -iregex '^.*\.JPG\|^.*\.JPEG\|^.*\.NEF\|^.*\.CR2\|^.*\.AVI\|^.*\.MP4\|^.*\.MOV' | sort )
+for file in $( find . -type f -iregex '^.*\.3GP' )
+do
+  time_stamp=$(mediainfo "$file" | grep "Encoded date" | head -n1 | cut -d: -f2-)
+  ts=$(TZ=CET date -d "$time_stamp" +"%Y-%m-%d_%H%M%S")
+  mv "$file" "$ts.3gp"
+done
+
+
+for file in $( find . -type f -iregex '^.*\.JPG\|^.*\.JPEG\|^.*\.NEF\|^.*\.CR2\|^.*\.AVI\|^.*\.MP4\|^.*\.MOV\|^.*\.3GP' | sort )
 do
   # strip directory and suffix from filenames
   fname=`basename $file`
