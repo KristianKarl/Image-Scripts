@@ -47,7 +47,7 @@ done
 
 for file in $( find . -type f -iregex '^.*\.3GP' )
 do
-  time_stamp=$(mediainfo "$file" | grep "Encoded date" | head -n1 | cut -d: -f2-)
+  time_stamp=$(exiftool -dateFormat "%Y-%m-%d %H:%M:%S" "$file" | grep "Create Date" | head -n1 | cut -d: -f2-)
   ts=$(TZ=CET date -d "$time_stamp" +"%Y-%m-%d_%H%M%S")
   mv "$file" "$ts.3gp"
 done
