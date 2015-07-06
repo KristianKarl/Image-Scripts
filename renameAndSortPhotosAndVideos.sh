@@ -9,7 +9,7 @@
 
 # Check if dependecy command exists
 command -v exiv2 >/dev/null 2>&1 || { echo >&2 "I require exiv2 but it's not installed.  Aborting."; exit 1; }
-command -v mediainfo >/dev/null 2>&1 || { echo >&2 "I require mediainfo but it's not installed.  Aborting."; exit 1; }
+command -v exiftool >/dev/null 2>&1 || { echo >&2 "I require exiftool but it's not installed.  Aborting."; exit 1; }
 
 
 SAVEIFS=$IFS
@@ -23,7 +23,7 @@ fi
 
 for file in $( find . -type f -iregex '^.*\.AVI' )
 do
-  time_stamp=$(mediainfo "$file" | grep "Encoded date" | head -n1 | cut -d: -f2-)
+  time_stamp=$(exiftool -dateFormat "%Y-%m-%d %H:%M:%S" "$file" | grep "Create Date" | head -n1 | cut -d: -f2-)
   ts=$(TZ=CET date -d "$time_stamp" +"%Y-%m-%d_%H%M%S")
   mv "$file" "$ts.AVI"
 done
@@ -31,7 +31,7 @@ done
 
 for file in $( find . -type f -iregex '^.*\.MP4' )
 do
-  time_stamp=$(mediainfo "$file" | grep "Encoded date" | head -n1 | cut -d: -f2-)
+  time_stamp=$(exiftool -dateFormat "%Y-%m-%d %H:%M:%S" "$file" | grep "Create Date" | head -n1 | cut -d: -f2-)
   ts=$(TZ=CET date -d "$time_stamp" +"%Y-%m-%d_%H%M%S")
   mv "$file" "$ts.mp4"
 done
@@ -39,7 +39,7 @@ done
 
 for file in $( find . -type f -iregex '^.*\.MOV' )
 do
-  time_stamp=$(mediainfo "$file" | grep "Encoded date" | head -n1 | cut -d: -f2-)
+  time_stamp=$(exiftool -dateFormat "%Y-%m-%d %H:%M:%S" "$file" | grep "Create Date" | head -n1 | cut -d: -f2-)
   ts=$(TZ=CET date -d "$time_stamp" +"%Y-%m-%d_%H%M%S")
   mv "$file" "$ts.mov"
 done
