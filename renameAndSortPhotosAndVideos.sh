@@ -24,7 +24,7 @@ fi
 for file in $( find . -type f -iregex '^.*\.AVI' )
 do
   time_stamp=$(exiftool -dateFormat "%Y-%m-%d %H:%M:%S" "$file" | grep "Create Date" | head -n1 | cut -d: -f2-)
-  ts=$(TZ=CET date -d "$time_stamp" +"%Y-%m-%d_%H%M%S")
+  ts=$(date -d "$time_stamp + 1 hour" +"%Y-%m-%d_%H%M%S")
   mv "$file" "$ts.AVI"
 done
 
@@ -32,7 +32,7 @@ done
 for file in $( find . -type f -iregex '^.*\.MP4' )
 do
   time_stamp=$(exiftool -dateFormat "%Y-%m-%d %H:%M:%S" "$file" | grep "Create Date" | head -n1 | cut -d: -f2-)
-  ts=$(TZ=CET date -d "$time_stamp" +"%Y-%m-%d_%H%M%S")
+  ts=$(date -d "$time_stamp + 1 hour" +"%Y-%m-%d_%H%M%S")
   mv "$file" "$ts.mp4"
 done
 
@@ -40,7 +40,7 @@ done
 for file in $( find . -type f -iregex '^.*\.MOV' )
 do
   time_stamp=$(exiftool -dateFormat "%Y-%m-%d %H:%M:%S" "$file" | grep "Create Date" | head -n1 | cut -d: -f2-)
-  ts=$(TZ=CET date -d "$time_stamp" +"%Y-%m-%d_%H%M%S")
+  ts=$(date -d "$time_stamp + 1 hour" +"%Y-%m-%d_%H%M%S")
   mv "$file" "$ts.mov"
 done
 
@@ -48,7 +48,7 @@ done
 for file in $( find . -type f -iregex '^.*\.3GP' )
 do
   time_stamp=$(exiftool -dateFormat "%Y-%m-%d %H:%M:%S" "$file" | grep "Create Date" | head -n1 | cut -d: -f2-)
-  ts=$(TZ=CET date -d "$time_stamp" +"%Y-%m-%d_%H%M%S")
+  ts=$(date -d "$time_stamp + 1 hour" +"%Y-%m-%d_%H%M%S")
   mv "$file" "$ts.3gp"
 done
 
