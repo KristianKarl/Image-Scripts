@@ -10,6 +10,8 @@
 # Check if dependecy command exists
 command -v exiv2 >/dev/null 2>&1 || { echo >&2 "I require exiv2 but it's not installed.  Aborting."; exit 1; }
 command -v exiftool >/dev/null 2>&1 || { echo >&2 "I require exiftool but it's not installed.  Aborting."; exit 1; }
+command -v ffprobe >/dev/null 2>&1 || { echo >&2 "I require ffprobe but it's not installed.  Aborting."; exit 1; }
+command -v jq >/dev/null 2>&1 || { echo >&2 "I require jq but it's not installed.  Aborting."; exit 1; }
 
 
 SAVEIFS=$IFS
@@ -21,35 +23,20 @@ if [ $num != "0" ]; then
 fi
 
 
-for file in $( find . -type f -iregex '^.*\.AVI' )
+# Use:
+#  exiftool "-CreateDate=2017:08:11 12:00:00" file.mp4
+# to modify UTC time for video
+for file in $( find . -type f -iregex '^.*\.AVI\|^.*\.MP4\|^.*\.MOV\|^.*\.3GP' )
 do
-  time_stamp=$(exiftool -dateFormat "%Y-%m-%d %H:%M:%S" "$file" | grep "Create Date" | head -n1 | cut -d: -f2-)
-  ts=$(date -d "$time_stamp + 1 hour" +"%Y-%m-%d_%H%M%S")
-  mv "$file" "$ts.AVI"
-done
+  # Get creation time for the video
+  time_stamp=$(ffprobe -v quiet -show_streams -show_format -of json "$file"| jq --raw-output '.format.tags | .creation_time')
+  #ts=$(date -d "$time_stamp - 1 hour" +"%Y-%m-%d_%H%M%S")
+  ts=$(date -d "$time_stamp" +"%Y-%m-%d_%H%M%S")
 
+  filename=$(basename "$file")
+  extension="${filename##*.}"
 
-for file in $( find . -type f -iregex '^.*\.MP4' )
-do
-  time_stamp=$(exiftool -dateFormat "%Y-%m-%d %H:%M:%S" "$file" | grep "Create Date" | head -n1 | cut -d: -f2-)
-  ts=$(date -d "$time_stamp + 1 hour" +"%Y-%m-%d_%H%M%S")
-  mv "$file" "$ts.mp4"
-done
-
-
-for file in $( find . -type f -iregex '^.*\.MOV' )
-do
-  time_stamp=$(exiftool -dateFormat "%Y-%m-%d %H:%M:%S" "$file" | grep "Create Date" | head -n1 | cut -d: -f2-)
-  ts=$(date -d "$time_stamp + 1 hour" +"%Y-%m-%d_%H%M%S")
-  mv "$file" "$ts.mov"
-done
-
-
-for file in $( find . -type f -iregex '^.*\.3GP' )
-do
-  time_stamp=$(exiftool -dateFormat "%Y-%m-%d %H:%M:%S" "$file" | grep "Create Date" | head -n1 | cut -d: -f2-)
-  ts=$(date -d "$time_stamp + 1 hour" +"%Y-%m-%d_%H%M%S")
-  mv "$file" "$ts.3gp"
+  mv "$file" "$ts.$extension"
 done
 
 
