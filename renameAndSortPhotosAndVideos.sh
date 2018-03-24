@@ -26,6 +26,8 @@ fi
 # Use:
 #  exiftool "-CreateDate=2017:08:11 12:00:00" file.mp4
 # to modify UTC time for video
+# Check with
+#  date -d "2018-02-24T12:32:57.000000Z" +"%Y-%m-%d_%H%M%S"
 for file in $( find . -type f -iregex '^.*\.AVI\|^.*\.MP4\|^.*\.MOV\|^.*\.3GP' )
 do
   # Get creation time for the video
