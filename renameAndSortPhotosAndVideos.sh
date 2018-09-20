@@ -28,12 +28,12 @@ fi
 # to modify UTC time for video
 # Check with
 #  date -d "2018-02-24T12:32:57.000000Z" +"%Y-%m-%d_%H%M%S"
-for file in $( find . -type f -iregex '^.*\.AVI\|^.*\.MP4\|^.*\.MOV\|^.*\.3GP' )
+for file in $( find . -type f -iregex '^.*\.AVI\|^.*\.MP4\|^.*\.MOV\|^.*\.3GP\|^.*\.GLV' )
 do
   # Get creation time for the video
   time_stamp=$(ffprobe -v quiet -show_streams -show_format -of json "$file"| jq --raw-output '.format.tags | .creation_time')
   #ts=$(date -d "$time_stamp - 1 hour" +"%Y-%m-%d_%H%M%S")
-  ts=$(date -d "$time_stamp" +"%Y-%m-%d_%H%M%S")
+  ts=$(date -d "$time_stamp - 2 hour" +"%Y-%m-%d_%H%M%S")
 
   filename=$(basename "$file")
   extension="${filename##*.}"
@@ -42,7 +42,7 @@ do
 done
 
 
-for file in $( find . -type f -iregex '^.*\.JPG\|^.*\.JPEG\|^.*\.NEF\|^.*\.CR2\|^.*\.AVI\|^.*\.MP4\|^.*\.MOV\|^.*\.3GP' | sort )
+for file in $( find . -type f -iregex '^.*\.JPG\|^.*\.JPEG\|^.*\.NEF\|^.*\.CR2\|^.*\.AVI\|^.*\.MP4\|^.*\.MOV\|^.*\.3GP\|^.*\.GLV' | sort )
 do
   # strip directory and suffix from filenames
   fname=`basename $file`
