@@ -10,7 +10,7 @@ SAVEIFS=$IFS
 IFS=$(echo -en "\n\b")
 
 # Include xmp files, as they are sidecar files for images and videos.
-for file in $( find . -type f -iregex '^.*\.xmp\|^.*\.JPG\|^.*\.JPEG\|^.*\.NEF\|^.*\.CR2\|^.*\.AVI\|^.*\.MP4\|^.*\.MOV\|^.*\.3GP' | sort )
+for file in $( find . -type f -iregex '^.*\.xmp\|^.*\.JPG\|^.*\.JPEG\|^.*\.NEF\|^.*\.DNG\|^.*\.CR2\|^.*\.AVI\|^.*\.MP4\|^.*\.MOV\|^.*\.3GP' | sort )
 do
   # strip directory and suffix from filenames
   fname=`basename $file`
